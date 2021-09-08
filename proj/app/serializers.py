@@ -2,6 +2,8 @@ from rest_framework import serializers
 
 from django.contrib.auth.models import User, Group
 
+from app import models
+
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -13,3 +15,8 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
         fields = ['url', 'name']
+
+
+class SnippetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Snippet
