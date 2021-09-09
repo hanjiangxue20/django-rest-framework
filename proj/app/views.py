@@ -4,7 +4,10 @@ from django.shortcuts import HttpResponse
 from app.models import Snippet
 from rest_framework import viewsets, status
 from rest_framework import permissions
+from rest_framework.decorators import api_view
 from rest_framework.filters import OrderingFilter
+from rest_framework.decorators import action
+
 from django_filters.rest_framework import DjangoFilterBackend
 
 from django.contrib.auth.models import User, Group
@@ -13,6 +16,7 @@ from app.serializers import UserSerializer, GroupSerializer, SnippetSerializer_S
 
 # Create your views here.
 from rest_framework.response import Response
+from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 
 
@@ -20,6 +24,11 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    @action(['GET'], detail=False, url_path='demo2')
+    def demo(self, request, *args, **kwargs):  # 默认URL为函数名称： /app/users/demo/
+        print(request.data)
+        return Response(data='ok UserViewSet')
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -127,3 +136,14 @@ from rest_framework import mixins, generics
 #
 #     def post(self, request, *args, **kwargs):
 #         return self.create(request, *args, **kwargs)
+
+
+# generics
+class SnippetList_v3(generics.ListCreateAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer_ModelSerializer
+
+
+class SnippetDetail_v3(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer_ModelSerializer

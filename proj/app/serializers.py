@@ -7,9 +7,12 @@ from app.models import STYLE_CHOICES, LANGUAGE_CHOICES
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
+    snippets = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippet.objects.all())
+
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'is_staff']
+        # fields = ['url', 'username', 'email', 'is_staff']
+        fields = ['url', 'username', 'email', 'snippets']
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
